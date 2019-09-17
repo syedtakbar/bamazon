@@ -1,5 +1,5 @@
 -- DELETE FROM bamazon.products WHERE item_id <> 0 ;
-SELECT item_id,product_name,department_name,price,stock_quantity FROM bamazon.products;
+SELECT item_id,product_name,department_name,price,stock_quantity, product_sales FROM bamazon.products;
 
 INSERT INTO bamazon.products 
 (product_name,department_name,price,stock_quantity)
@@ -15,5 +15,15 @@ VALUES
 ('Motorola - Moto G7 with 64GB Memory Cell Phone (Unlocked) - Ceramic Black', 'Phone', 149.99,10),
 ('Razer - Phone 2 with 64GB Memory Cell Phone (Unlocked) - Black', 'Phone', 349.99,10);
 
+
+-- DELETE FROM bamazon.departments WHERE item_id <> 0 ;
+SELECT department_id,department_name,over_head_costs FROM bamazon.departments;
+
+INSERT INTO bamazon.departments 
+(department_name,over_head_costs)
+VALUES 
+('TV', 6999.99),
+('Phone', 4999.99),
+('HeadPhone', 1999.99)
 
 

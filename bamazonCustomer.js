@@ -72,16 +72,17 @@ const BamazonCust = {
             return;
         }
         
+        const totalAmt = quantityOrdered * price;
         
-        let sql = `CALL updateProduct(?,?)`;
+        let sql = `CALL updateProduct(?,?,?)`;
         let connection = BamazonCust.mysql.createConnection(config);
         
-        connection.query(sql, [itemId, quantityOrdered], (error, results) => {
+        connection.query(sql, [itemId, quantityOrdered, totalAmt], (error, results) => {
                     if (error) {
                         return console.error(error.message);
                     }
                     
-                    const totalAmt = quantityOrdered * price;
+                    
                     console.log(BamazonCust.colors.green (
                                 ` 
                                     Order successful for Item ${itemId} and quantity ${quantityOrdered}
