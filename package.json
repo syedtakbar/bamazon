@@ -1,0 +1,27 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Amazon-like storefront console application using Node.js &amp; MySQL",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syedtakbar/bamazon.git"
+  },
+  "keywords": [],
+  "author": "Syed Akbar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/syedtakbar/bamazon/issues"
+  },
+  "homepage": "https://github.com/syedtakbar/bamazon#readme",
+  "dependencies": {
+    "colors": "^1.3.3",
+    "fs": "0.0.1-security",
+    "inquirer": "^7.0.0",
+    "mysql": "^2.17.1",
+    "pad": "^3.2.0"
+  }
+}
