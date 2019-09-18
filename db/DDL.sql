@@ -3,8 +3,9 @@ CREATE database bamazon;
 
 USE bamazon;
 
+DROP TABLE IF EXISTS products;
 CREATE TABLE products (
-  item_id INT NOT NULL AUTO_INCREMENT,
+  item_id INT(10) ZEROFILL NOT NULL AUTO_INCREMENT,
   product_name VARCHAR(255) NULL,
   department_name VARCHAR(255) NULL,
   price DECIMAL(10,2) NULL,
@@ -12,12 +13,15 @@ CREATE TABLE products (
   PRIMARY KEY (item_id)
 );
 
+
+DROP TABLE IF EXISTS departments;
 CREATE TABLE departments (
-  department_id INT NOT NULL AUTO_INCREMENT,
+  department_id INT (10) ZEROFILL NOT NULL AUTO_INCREMENT,
   department_name VARCHAR(255) NULL,
   over_head_costs DECIMAL(10,2) NULL,
   PRIMARY KEY (department_id)
 );
+
 
 ALTER TABLE products
 ADD COLUMN product_sales  DECIMAL(10,2) NULL;
@@ -29,12 +33,14 @@ DELIMITER $$
 USE `bamazon`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProducts`()
 BEGIN
-	SELECT item_id,product_name,department_name,price,stock_quantity 
+	SELECT item_id,product_name,department_name,price,stock_quantity,COALESCE(product_sales,0 ) As product_sales 
 	FROM bamazon.products;
     
 END$$
 
 DELIMITER ;
+
+
 
 
 USE `bamazon`;
@@ -44,7 +50,7 @@ DELIMITER $$
 USE `bamazon`$$
 CREATE PROCEDURE `getProduct` (in item_id_input int(10))
 BEGIN
-	SELECT item_id,product_name,department_name,price,stock_quantity 
+	SELECT item_id,product_name,department_name,price,stock_quantity, COALESCE(product_sales,0 ) As product_sales
     FROM bamazon.products
     WHERE bamazon.products.item_id = item_id_input;
 END$$
@@ -57,13 +63,20 @@ DROP procedure IF EXISTS `updateProduct`;
 
 DELIMITER $$
 USE `bamazon`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProduct`(in item_id_input int(10), in stock_quantity_input int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProduct`(
+											in item_id_input INT(10), 
+                                            in stock_quantity_input INT,
+                                            in product_sales_input DECIMAL(10,2))
 BEGIN
 	UPDATE 
     
 		bamazon.products 
-		SET bamazon.products.stock_quantity =  bamazon.products.stock_quantity - stock_quantity_input
-    WHERE bamazon.products.item_id = item_id_input;
+		SET 
+				bamazon.products.stock_quantity =  bamazon.products.stock_quantity - stock_quantity_input,
+				bamazon.products.product_sales = COALESCE(bamazon.products.product_sales, 0) + product_sales_input
+        
+    WHERE 
+		bamazon.products.item_id = item_id_input;
 END$$
 
 DELIMITER ;
@@ -121,27 +134,18 @@ END$$
 
 DELIMITER ;
 
-
-
 USE `bamazon`;
-DROP procedure IF EXISTS `updateProduct`;
+DROP procedure IF EXISTS `insertDepartment`;
 
 DELIMITER $$
 USE `bamazon`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updateProduct`(
-											in item_id_input INT(10), 
-                                            in stock_quantity_input INT,
-                                            in product_sales_input DECIMAL(10,2))
+CREATE PROCEDURE `insertDepartment` (in department_name varchar(255),
+									 in over_head_costs DECIMAL(10,2))
 BEGIN
-	UPDATE 
-    
-		bamazon.products 
+		INSERT INTO bamazon.departments
 		SET 
-				bamazon.products.stock_quantity =  bamazon.products.stock_quantity - stock_quantity_input,
-				bamazon.products.product_sales = COALESCE(bamazon.products.product_sales, 0) + product_sales_input
-        
-    WHERE 
-		bamazon.products.item_id = item_id_input;
+			bamazon.departments.department_name = department_name,
+			bamazon.departments.over_head_costs = over_head_costs;
 END$$
 
 DELIMITER ;
@@ -149,5 +153,32 @@ DELIMITER ;
 
 
 
+USE `bamazon`;
+DROP procedure IF EXISTS `getSalesByDepartments`;
+
+DELIMITER $$
+USE `bamazon`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSalesByDepartments`()
+BEGIN
+	SELECT 
+		A.department_id, 
+        A.department_name, 
+        A.over_head_costs, 
+        SUM(COALESCE(B.product_sales,0 )) AS product_sales,
+        SUM(COALESCE(B.product_sales,0 )) - A.over_head_costs  AS total_profit
+	FROM bamazon.departments A 
+    
+    LEFT OUTER JOIN bamazon.products B ON 
+    A.department_name = B.department_name    
+    GROUP BY 
+		A.department_id, 
+        A.department_name, 
+        A.over_head_costs
+	
+    ORDER BY A.department_id;
+    
+END$$
+
+DELIMITER ;
 
 

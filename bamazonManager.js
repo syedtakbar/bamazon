@@ -36,9 +36,10 @@ const BamazonMgr = {
                                 type: "number",
                                 name: "quantity",
                                 message: "Please enter quantity for your selection: ",                                                        
-                                filter: function(val) {
-                                return val.toLowerCase();
-                                }                       
+                                validate:  (val) => {
+                                    const isValid = !isNaN(parseFloat(val));
+                                    return isValid || "quantity should be a number!";
+                                }
                             }
                         ];
      }, 
@@ -161,7 +162,7 @@ const BamazonMgr = {
 
     processAnswer: (answers) => {      
         const item_id = answers.item;
-        const filterAnswer = mgrViewMenu.MgrViewMenu.filter(x => x.value === parseInt(item_id.substring(0,2)));                         
+        const filterAnswer = mgrViewMenu.mgrViewMenu.filter(x => x.value === parseInt(item_id.substring(0,2)));                         
         const api = filterAnswer[0].api;         
         //console.log(api);
         BamazonMgr[api]();        
