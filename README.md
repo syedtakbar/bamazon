@@ -35,7 +35,7 @@ To run the customer interface please follow the steps below:
 
 	node bamazonCustomer.js
 
-### Manager Interace
+### Manager Interface
 
 The manager interface presents a list of four options, as below. 
 
@@ -58,7 +58,7 @@ To run the manager interface please follow the steps below:
 	node bamazonManager.js
 
 
-### Supervisor Interace
+### Supervisor Interface
 
 The supervisor interface presents a list of four options, as below. 
 
