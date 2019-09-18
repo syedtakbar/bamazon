@@ -83,7 +83,7 @@ To run the supervisor interface please follow the steps below:
 
 ### Bamazon Demo
 
-You can download and watch the demo of the bamazon customer, manager and interfaces below.
+You can watch the demo of the bamazon customer, manager and supervisor interfaces below.
 
 ![Results](./bamazon.gif)
     
