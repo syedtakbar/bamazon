@@ -8,8 +8,8 @@ This application implements a simple command line based storefront using the npm
 
 In order to run this application, you should have the MySQL database already set up on your machine. If you don't, visit the [MySQL installation page](https://dev.mysql.com/downloads/mysql/8.0.html) to install the version you need for your operating system. Once you have MySQL isntalled, you will be able to create the *bamazon* database and the *products* and *departments* tables and related stored procudures with the SQL code found in [./db/DDL.sql](DDL.sql). Run this code inside your MySQL client like [MySQL Workbench](https://www.mysql.com/products/workbench/) to populate the database, then you will be ready to proceed with running the bamazon customer, manager and supervisor interfaces.
 
-### Initial Setp
-Please clone the bamazon repo and install necessary node modules, as below.
+### Initial Setup
+Clone the bamazon repo and install necessary node modules, as below.
 
 	git clone git@github.com:syedtakbar/bamazon.git
 	cd bamazon
